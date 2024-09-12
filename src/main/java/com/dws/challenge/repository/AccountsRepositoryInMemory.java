@@ -61,20 +61,8 @@ public class AccountsRepositoryInMemory implements AccountsRepository {
     @Override
     //@Transactional
     public TransferResponse transferMoney(TransferDTO transferDTO) throws BadRequestException {
-        if (transferDTO.getBalance().compareTo(BigDecimal.ZERO) < 0) {
-            throw new BadRequestException("Transfer amount must be positive");
-        }
-        Account accountFrom = accounts.get(transferDTO.getAccountFromId());
-        if (Objects.isNull(accountFrom)) {
-            throw new BadRequestException("AccountFromId doesn't exist");
-        }
-        Account accountTo = accounts.get(transferDTO.getAccountToId());
-        if (Objects.isNull(accountTo)) {
-            throw new BadRequestException("AccountToId doesn't exist");
-        }
-        if (transferDTO.getBalance().compareTo(accountFrom.getBalance()) > 0) {
-            throw new BadRequestException("Insufficient balance");
-        }
+        Account accountFrom = this.getAccount(transferDTO.getAccountFromId());
+        Account accountTo = this.getAccount(transferDTO.getAccountToId());
         Lock lock1, lock2;
         if (accountFrom.getAccountId().compareTo(accountTo.getAccountId()) < 0) {
             lock1 = accountLocks.get(accountFrom.getAccountId());
