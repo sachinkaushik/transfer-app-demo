@@ -14,7 +14,8 @@ payload :
 
 Success Response : 
 
-<img width="629" alt="image" src="https://github.com/user-attachments/assets/4fda79e0-ad74-442b-9478-10c094836e24">
+<img width="738" alt="image" src="https://github.com/user-attachments/assets/1b597c9e-03fc-4b2f-8951-faa6a604184b">
+
 
 Failed Response :
 
