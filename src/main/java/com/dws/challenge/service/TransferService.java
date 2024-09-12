@@ -6,6 +6,7 @@ import com.dws.challenge.domain.TransferResponse;
 import com.dws.challenge.exception.BadRequestException;
 import com.dws.challenge.repository.AccountsRepository;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @Service
+@Slf4j
 public class TransferService {
 
     @Getter
@@ -24,6 +26,12 @@ public class TransferService {
     }
 
     public TransferResponse transferMoney(TransferDTO transferDTO) throws BadRequestException {
+        validateRequest(transferDTO);
+        return this.accountsRepository.transferMoney(transferDTO);
+    }
+
+    private void validateRequest(TransferDTO transferDTO) {
+        log.info("Validating transfer request....");
         if (transferDTO.getBalance().compareTo(BigDecimal.ZERO) < 0) {
             throw new BadRequestException("Transfer amount must be positive");
         }
@@ -37,6 +45,6 @@ public class TransferService {
         if (transferDTO.getBalance().compareTo(accountFrom.getBalance()) > 0) {
             throw new BadRequestException("Insufficient balance");
         }
-        return this.accountsRepository.transferMoney(transferDTO);
+        log.info("Transfer request validated successfully....");
     }
 }

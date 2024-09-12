@@ -7,17 +7,18 @@ import com.dws.challenge.exception.BadRequestException;
 import com.dws.challenge.exception.DuplicateAccountIdException;
 import com.dws.challenge.exception.TransferFailedException;
 import com.dws.challenge.service.NotificationService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 @Repository
+@Slf4j
 public class AccountsRepositoryInMemory implements AccountsRepository {
 
     private final Map<String, Account> accounts = new ConcurrentHashMap<>();
@@ -62,6 +63,7 @@ public class AccountsRepositoryInMemory implements AccountsRepository {
     @Override
     //@Transactional
     public TransferResponse transferMoney(TransferDTO transferDTO) throws BadRequestException {
+        log.info("transferMoney from accountId : {} to accountId : {}", transferDTO.getAccountFromId(), transferDTO.getAccountToId());
         Account accountFrom = this.getAccount(transferDTO.getAccountFromId());
         Account accountTo = this.getAccount(transferDTO.getAccountToId());
         Lock lock1, lock2;
@@ -87,13 +89,17 @@ public class AccountsRepositoryInMemory implements AccountsRepository {
 
             response.setNewBalance(accountTo.getBalance());
             response.setMessage("Successfully transferred amount from source to destination account");
+
+            log.info("Balance transferred successfully.......");
         }catch (Exception e){
+            log.error("Exception occurred in transferMoney....", e.getMessage());
             throw new TransferFailedException("Amount transferred failed");
         }
         finally {
             lock2.unlock();
             lock1.unlock();
         }
+        log.info("Sending notification to both account holder");
         notificationService.notifyAboutTransfer(accountFrom, "Transferred " + transferDTO.getBalance() + " to account " + transferDTO.getAccountToId());
         notificationService.notifyAboutTransfer(accountTo, "Received " + transferDTO.getBalance() + " from account " + transferDTO.getAccountFromId());
         return response;
