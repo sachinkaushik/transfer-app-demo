@@ -5,6 +5,7 @@ import com.dws.challenge.domain.TransferDTO;
 import com.dws.challenge.domain.TransferResponse;
 import com.dws.challenge.exception.BadRequestException;
 import com.dws.challenge.exception.DuplicateAccountIdException;
+import com.dws.challenge.exception.TransferFailedException;
 import com.dws.challenge.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -87,7 +88,7 @@ public class AccountsRepositoryInMemory implements AccountsRepository {
             response.setNewBalance(accountTo.getBalance());
             response.setMessage("Successfully transferred amount from source to destination account");
         }catch (Exception e){
-            response.setMessage("Amount transferred failed");
+            throw new TransferFailedException("Amount transferred failed");
         }
         finally {
             lock2.unlock();
