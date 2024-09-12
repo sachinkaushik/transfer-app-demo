@@ -14,11 +14,17 @@ payload :
 
 Success Response : 
 
-<img width="738" alt="image" src="https://github.com/user-attachments/assets/1b597c9e-03fc-4b2f-8951-faa6a604184b">
+<img width="748" alt="image" src="https://github.com/user-attachments/assets/b9a65f5a-6415-4ed8-83e4-ab7dd85f0481">
+
+
 
 
 Failed Response :
 
 
-<img width="744" alt="image" src="https://github.com/user-attachments/assets/efe173a1-b4d8-45fb-a364-880cfadd3e9e">
+<img width="727" alt="image" src="https://github.com/user-attachments/assets/b3c1a6f5-0752-4c7d-8024-56ba3bea1f33">
+
+
+<img width="717" alt="image" src="https://github.com/user-attachments/assets/2e4ea8e9-28de-4150-9c27-44886d032f1f">
+
 
